@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
+import { watchEffect, type PropType, ref } from "vue";
 import {
   useEditor,
   EditorContent,
@@ -14,6 +14,8 @@ import {
 } from "@tiptap/vue-3";
 import { EditorProps } from "@tiptap/pm/view";
 import { Editor as EditorClass } from "@tiptap/core";
+import { useStorage, useDebounceFn } from "@vueuse/core";
+
 import { defaultEditorContent } from "../lib/default-content";
 import { defaultExtensions } from "../components/extensions";
 import { defaultEditorProps } from "../lib/props";
@@ -42,7 +44,9 @@ const props = defineProps({
    */
   defaultValue: {
     type: Object as PropType<JSONContent>,
-    default: defaultEditorContent,
+    default: () => {
+      return defaultEditorContent;
+    },
   },
   /**
    * A list of extensions to use for the editor, in addition to the default Novel extensions.
@@ -94,13 +98,33 @@ const props = defineProps({
   },
 });
 
+const content = useStorage(props.storageKey, props.defaultValue);
+
+const debouncedUpdate = useDebounceFn(({ editor }) => {
+  const json = editor.getJSON();
+  content.value = json;
+  props.onDebouncedUpdate(editor);
+}, props.debounceDuration);
+
 const editor = useEditor({
   extensions: [...defaultExtensions, ...props.extensions],
   editorProps: {
     ...defaultEditorProps,
     ...props.editorProps,
   },
+  onUpdate: (e) => {
+    props.onUpdate(e.editor);
+    debouncedUpdate(e);
+  },
   autofocus: "end",
+});
+
+const hydrated = ref(false);
+watchEffect(() => {
+  if (editor.value && content.value && !hydrated.value) {
+    editor.value.commands.setContent(content.value);
+    hydrated.value = true;
+  }
 });
 </script>
 
