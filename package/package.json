@@ -36,6 +36,7 @@
     "@tiptap/suggestion": "^2.1.7",
     "@tiptap/vue-3": "^2.1.7",
     "@vueuse/core": "^10.4.1",
+    "ai": "^2.2.11",
     "lucide-vue-next": "^0.274.0",
     "tailwindcss-animate": "^1.0.7",
     "tiptap-markdown": "^0.8.2",

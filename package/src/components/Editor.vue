@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, type PropType, ref } from "vue";
+import { watchEffect, type PropType, ref, watch } from "vue";
 import {
   useEditor,
   EditorContent,
@@ -16,12 +16,12 @@ import {
 import { EditorProps } from "@tiptap/pm/view";
 import { Editor as EditorClass } from "@tiptap/core";
 import { useStorage, useDebounceFn } from "@vueuse/core";
-
+import { useCompletion } from "ai/vue";
 import { defaultEditorContent } from "../lib/default-content";
 import { defaultExtensions } from "../components/extensions";
 import { defaultEditorProps } from "../lib/props";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
-
+import { getPrevText } from "../lib/editor";
 const props = defineProps({
   /**
    * The API route to use for the OpenAI completion API.
@@ -115,12 +115,97 @@ const editor = useEditor({
     ...props.editorProps,
   },
   onUpdate: (e) => {
-    props.onUpdate(e.editor);
-    debouncedUpdate(e);
+    const selection = e.editor.state.selection;
+    const lastTwo = getPrevText(e.editor, {
+      chars: 2,
+    });
+    // Run the completion API if the user types "++" at the end of the document.
+    if (lastTwo === "++" && !isLoading.value) {
+      e.editor.commands.deleteRange({
+        from: selection.from - 2,
+        to: selection.from,
+      });
+      console.log(
+        getPrevText(e.editor, {
+          chars: 5000,
+        })
+      );
+      complete(
+        getPrevText(e.editor, {
+          chars: 5000,
+        })
+      );
+    } else {
+      props.onUpdate(e.editor);
+      debouncedUpdate(e);
+    }
   },
   autofocus: "end",
 });
 
+const { complete, completion, isLoading, stop } = useCompletion({
+  id: "novel-vue",
+  api: props.completionApi,
+  onFinish: (_prompt, completion) => {
+    editor.value?.commands.setTextSelection({
+      from: editor.value.state.selection.from - completion.length,
+      to: editor.value.state.selection.from,
+    });
+  },
+  onError: (err) => {
+    console.error(err);
+  },
+});
+
+// Insert chunks of the generated text
+watch(
+  () => completion.value,
+  (newCompletion, oldCompletion) => {
+    const diff = newCompletion?.slice(oldCompletion?.length);
+    if (diff) {
+      editor.value?.commands.insertContent(diff);
+    }
+  }
+);
+
+// if user presses escape or cmd + z and it's loading,
+// stop the request, delete the completion, and insert back the "++"
+const onKeyDown = (e: KeyboardEvent) => {
+  if (e.key === "Escape" || (e.metaKey && e.key === "z")) {
+    stop();
+    if (e.key === "Escape") {
+      editor.value?.commands.deleteRange({
+        from: editor.value.state.selection.from - completion.value.length,
+        to: editor.value.state.selection.from,
+      });
+    }
+    editor.value?.commands.insertContent("++");
+  }
+};
+
+const mousedownHandler = (e: MouseEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  stop();
+  if (window.confirm("AI writing paused. Continue?")) {
+    complete(editor.value?.getText() || "");
+  }
+};
+
+watch(
+  () => isLoading.value,
+  (isLoading) => {
+    if (isLoading) {
+      document.addEventListener("keydown", onKeyDown);
+      window.addEventListener("mousedown", mousedownHandler);
+    } else {
+      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("mousedown", mousedownHandler);
+    }
+  }
+);
+
+// Load the editor content from local storage on mount.
 const hydrated = ref(false);
 watchEffect(() => {
   if (editor.value && content.value && !hydrated.value) {

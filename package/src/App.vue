@@ -4,7 +4,7 @@ import Editor from "./components/Editor.vue";
 
 <template>
   <div class="mt-8">
-    <Editor />
+    <Editor completion-api="http://localhost:3000/api/generate" />
   </div>
 </template>
 
