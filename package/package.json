@@ -1,7 +1,8 @@
 {
   "name": "novel-vue",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.2",
+  "author": "Naveen Naidu <mnaveennaidu9927@gmail.com>",
+  "description": "A Vue 3 component for the novel editor",
   "type": "module",
   "files": [
     "dist"
@@ -12,11 +13,13 @@
     ".": {
       "import": "./dist/novel-vue.js",
       "require": "./dist/novel-vue.umd.cjs"
-    }
+    },
+    "./style.css": "./dist/style.css"
   },
+  "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vue-tsc --emitDeclarationOnly && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -50,6 +53,7 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.5.3",
     "vue-tsc": "^1.8.5"
   }
 }

@@ -15,27 +15,4 @@ export const defaultEditorProps: EditorProps = {
       }
     },
   },
-  handlePaste: (view, event) => {
-    if (
-      event.clipboardData &&
-      event.clipboardData.files &&
-      event.clipboardData.files[0]
-    ) {
-      event.preventDefault();
-      return true;
-    }
-    return false;
-  },
-  handleDrop: (view, event, _slice, moved) => {
-    if (
-      !moved &&
-      event.dataTransfer &&
-      event.dataTransfer.files &&
-      event.dataTransfer.files[0]
-    ) {
-      event.preventDefault();
-      return true;
-    }
-    return false;
-  },
 };
