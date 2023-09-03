@@ -1,5 +1,6 @@
 <template>
   <div @click="editor?.chain().focus().run()" :class="className">
+    <BubbleMenu v-if="editor" :editor="editor" />
     <EditorContent :editor="editor" />
   </div>
 </template>
@@ -19,6 +20,7 @@ import { useStorage, useDebounceFn } from "@vueuse/core";
 import { defaultEditorContent } from "../lib/default-content";
 import { defaultExtensions } from "../components/extensions";
 import { defaultEditorProps } from "../lib/props";
+import BubbleMenu from "../components/BubbleMenu/index.vue";
 
 const props = defineProps({
   /**
