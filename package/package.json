@@ -42,6 +42,7 @@
     "ai": "^2.2.11",
     "lucide-vue-next": "^0.274.0",
     "tailwindcss-animate": "^1.0.7",
+    "tippy.js": "^6.3.7",
     "tiptap-markdown": "^0.8.2",
     "vue": "^3.3.4"
   },

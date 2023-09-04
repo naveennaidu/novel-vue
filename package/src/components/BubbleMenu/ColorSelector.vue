@@ -22,7 +22,7 @@
         class="z-[99999] absolute my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border border-stone-200 bg-white p-1 shadow-xl animate-in fade-in slide-in-from-top-1"
         v-slot="{ close }"
       >
-        <div className="my-1 px-2 text-sm text-stone-500">Color</div>
+        <div class="px-2 my-1 text-sm text-stone-500">Color</div>
         <button
           v-for="(textColor, index) in TEXT_COLORS"
           :key="index"

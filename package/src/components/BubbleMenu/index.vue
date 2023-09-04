@@ -10,7 +10,7 @@
         v-for="(item, index) in items"
         :key="index"
         @click="item.command()"
-        className="p-2 text-stone-600 hover:bg-stone-100 active:bg-stone-200"
+        class="p-2 text-stone-600 hover:bg-stone-100 active:bg-stone-200"
         type="button"
       >
         <component

@@ -17,11 +17,13 @@ import { EditorProps } from "@tiptap/pm/view";
 import { Editor as EditorClass } from "@tiptap/core";
 import { useStorage, useDebounceFn } from "@vueuse/core";
 import { useCompletion } from "ai/vue";
+
 import { defaultEditorContent } from "../lib/default-content";
 import { defaultExtensions } from "../components/extensions";
 import { defaultEditorProps } from "../lib/props";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
 import { getPrevText } from "../lib/editor";
+
 const props = defineProps({
   /**
    * The API route to use for the OpenAI completion API.
@@ -125,11 +127,6 @@ const editor = useEditor({
         from: selection.from - 2,
         to: selection.from,
       });
-      console.log(
-        getPrevText(e.editor, {
-          chars: 5000,
-        })
-      );
       complete(
         getPrevText(e.editor, {
           chars: 5000,

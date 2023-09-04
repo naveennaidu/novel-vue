@@ -10,6 +10,7 @@ import TaskList from "@tiptap/extension-task-list";
 import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
 import { InputRule } from "@tiptap/core";
+import SlashCommand from "./slashExtension";
 
 export const defaultExtensions = [
   StarterKit.configure({
@@ -130,4 +131,5 @@ export const defaultExtensions = [
     html: false,
     transformCopiedText: true,
   }),
+  SlashCommand,
 ];
