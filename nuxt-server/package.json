@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "ai": "^2.2.11",
+    "novel-vue": "^0.0.3",
     "openai": "^4.4.0"
   }
 }
