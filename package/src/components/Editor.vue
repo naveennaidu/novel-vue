@@ -140,6 +140,10 @@ const editor = useEditor({
   autofocus: "end",
 });
 
+defineExpose({
+  editor,
+});
+
 const { complete, completion, isLoading, stop } = useCompletion({
   id: "novel-vue",
   api: props.completionApi,

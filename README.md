@@ -41,6 +41,44 @@ import "novel-vue/dist/style.css";
 
 > **Note**: Make sure to define an API endpoint that matches the `completionApi` prop (default is `/api/generate`). This is needed for the AI autocompletions to work. Here's an example: https://github.com/naveennaidu/novel-vue/blob/main/nuxt-server/server/api/generate.ts
 
+You can get the editor instance of tiptap by using the `editor` ref.
+
+For example, to set the content of the editor manually, you can do something like this:
+
+```vue
+<template>
+  <button @click="setContent">Set Content</button>
+  <Editor ref="editorRef" />
+</template>
+
+<script setup lang="ts">
+import { Editor as EditorClass } from "@tiptap/core";
+import { Editor } from "novel-vue";
+import "novel-vue/dist/style.css";
+
+const editorRef = ref<{ editor: EditorClass }>();
+
+function setContent() {
+  if (editorRef.value) {
+    editorRef.value.editor.commands.setContent({
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Example Text",
+            },
+          ],
+        },
+      ],
+    });
+  }
+}
+</script>
+```
+
 ## Projects using Novel Vue
 
 [Novuel](https://github.com/naveennaidu/novuel): Open Source AI Writing App built with [Nuxt 3](https://nuxt.com/) and [Nuxt UI](https://ui.nuxt.com/)
