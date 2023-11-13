@@ -1,6 +1,6 @@
 {
   "name": "novel-vue",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Naveen Naidu <mnaveennaidu9927@gmail.com>",
   "description": "A Vue 3 component for the novel editor",
   "type": "module",
