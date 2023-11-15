@@ -10,7 +10,7 @@ export default defineLazyEventHandler(async () => {
 
   return defineEventHandler(async (event) => {
     // Extract the `prompt` from the body of the request
-    const body = await readBody(event);
+    const body = event.node.req
     const file = body || "";
     const filename = event.headers.get("x-vercel-filename") || "file.txt";
     const contentType = event.headers.get("content-type") || "text/plain";
