@@ -3,6 +3,7 @@
     <BubbleMenu v-if="editor" :editor="editor" />
     <EditorContent :editor="editor" />
   </div>
+  <Toaster />
 </template>
 
 <script setup lang="ts">
@@ -22,6 +23,7 @@ import { defaultEditorContent } from "../lib/default-content";
 import { defaultExtensions } from "../components/extensions";
 import { defaultEditorProps } from "../lib/props";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
+import { Toaster } from 'sonner'
 import { getPrevText } from "../lib/editor";
 
 const props = defineProps({
