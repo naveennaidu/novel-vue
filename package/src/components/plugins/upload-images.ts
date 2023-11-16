@@ -15,7 +15,7 @@ const UploadImagesPlugin = () =>
       apply(tr, set) {
         set = set.map(tr.mapping, tr.doc);
         // See if the transaction adds or removes any placeholders
-        const action = tr.getMeta(this);
+        const action = tr.getMeta(this as any);
         if (action && action.add) {
           const { id, pos, src } = action.add;
 
@@ -34,7 +34,7 @@ const UploadImagesPlugin = () =>
           set = set.add(tr.doc, [deco]);
         } else if (action && action.remove) {
           set = set.remove(
-            set.find(null, null, (spec) => spec.id == action.remove.id)
+            set.find(undefined, undefined, (spec) => spec.id == action.remove.id)
           );
         }
         return set;
@@ -51,7 +51,7 @@ export default UploadImagesPlugin;
 
 function findPlaceholder(state: EditorState, id: {}) {
   const decos = uploadKey.getState(state);
-  const found = decos.find(null, null, (spec) => spec.id == id);
+  const found = decos.find(null, null, (spec: any) => spec.id == id);
   return found.length ? found[0].from : null;
 }
 
@@ -118,7 +118,7 @@ export const handleImageUpload = (file: File) => {
         method: "POST",
         headers: {
           "content-type": file?.type || "application/octet-stream",
-          "x-vercel-filename": file?.name || "image.png",
+          "x-vercel-filename": encodeURIComponent(file?.name || "image.png"),
         },
         body: file,
       }).then(async (res) => {
@@ -145,8 +145,8 @@ export const handleImageUpload = (file: File) => {
       }),
       {
         loading: "Uploading image...",
-        success: "Image uploaded successfully.",
-        error: (e) => e.message,
+        success: () => "Image uploaded successfully.",
+        error: () => "Image uploaded failed.",
       }
     );
   });
