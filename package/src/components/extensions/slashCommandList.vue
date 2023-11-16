@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watch } from "vue";
+import { inject, PropType, ref, watch } from "vue";
 import { Editor, Range } from "@tiptap/core";
 import { SuggestionItem } from "./slashExtension";
 import LoadingCircle from "../icons/loadingCircle.vue";
@@ -55,8 +55,8 @@ const props = defineProps({
 const selectedIndex = ref(0);
 
 const { complete, isLoading } = useCompletion({
-  id: "novel",
-  api: "/api/generate",
+  id: "novel-vue",
+  api: inject('completionApi'),
   onResponse: (_) => {
     props.editor.chain().focus().deleteRange(props.range).run();
   },
