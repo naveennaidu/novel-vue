@@ -3,10 +3,11 @@
     <BubbleMenu v-if="editor" :editor="editor" />
     <EditorContent :editor="editor" />
   </div>
+  <Toaster />
 </template>
 
 <script setup lang="ts">
-import { watchEffect, type PropType, ref, watch, provide } from "vue";
+import { watchEffect, type PropType, ref, watch } from "vue";
 import {
   useEditor,
   EditorContent,
@@ -22,9 +23,18 @@ import { defaultEditorContent } from "../lib/default-content";
 import { defaultExtensions } from "../components/extensions";
 import { defaultEditorProps } from "../lib/props";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
+import { Toaster } from 'sonner'
 import { getPrevText } from "../lib/editor";
 
 const props = defineProps({
+  /**
+   * The API route to use for the Vercel Blob.
+   * Defaults to "/api/upload".
+   */
+   blobApi: {
+    type: String,
+    default: "/api/upload",
+  },
   /**
    * The API route to use for the OpenAI completion API.
    * Defaults to "/api/generate".
@@ -103,6 +113,7 @@ const props = defineProps({
 });
 
 provide('completionApi', props.completionApi)
+useStorage('blobApi', props.blobApi)
 
 const content = useStorage(props.storageKey, props.defaultValue);
 
