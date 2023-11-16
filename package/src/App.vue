@@ -27,7 +27,7 @@ function setContent() {
 <template>
   <div class="mt-8">
     <button @click="setContent">Set Content</button>
-    <Editor completion-api="http://localhost:3000/api/generate" ref="editor" />
+    <Editor blob-api="http://localhost:3000/api/upload" completion-api="http://localhost:3000/api/generate" ref="editor" />
   </div>
 </template>
 

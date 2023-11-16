@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, type PropType, ref, watch } from "vue";
+import { watchEffect, type PropType, ref, watch, provide } from "vue";
 import {
   useEditor,
   EditorContent,
@@ -27,6 +27,14 @@ import { Toaster } from 'sonner'
 import { getPrevText } from "../lib/editor";
 
 const props = defineProps({
+  /**
+   * The API route to use for the Vercel Blob.
+   * Defaults to "/api/upload".
+   */
+   blobApi: {
+    type: String,
+    default: "/api/upload",
+  },
   /**
    * The API route to use for the OpenAI completion API.
    * Defaults to "/api/generate".
@@ -103,6 +111,8 @@ const props = defineProps({
     default: "novel__content",
   },
 });
+
+useStorage('blobApi', props.blobApi)
 
 const content = useStorage(props.storageKey, props.defaultValue);
 
