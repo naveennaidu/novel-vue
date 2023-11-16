@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, type PropType, ref, watch, provide } from "vue";
+import { watchEffect, type PropType, ref, watch } from "vue";
 import {
   useEditor,
   EditorContent,
