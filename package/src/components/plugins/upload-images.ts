@@ -1,4 +1,5 @@
 import { BlobResult } from "@vercel/blob";
+import { useStorage } from "@vueuse/core";
 import { toast } from "sonner";
 import { EditorState, Plugin, PluginKey } from "@tiptap/pm/state";
 import { Decoration, DecorationSet, EditorView } from "@tiptap/pm/view";
@@ -114,7 +115,7 @@ export const handleImageUpload = (file: File) => {
   // upload to Vercel Blob
   return new Promise((resolve) => {
     toast.promise(
-      fetch("/api/upload", {
+      fetch(useStorage('blobApi', '/api/upload').value, {
         method: "POST",
         headers: {
           "content-type": file?.type || "application/octet-stream",

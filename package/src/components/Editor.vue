@@ -28,6 +28,14 @@ import { getPrevText } from "../lib/editor";
 
 const props = defineProps({
   /**
+   * The API route to use for the Vercel Blob.
+   * Defaults to "/api/upload".
+   */
+   blobApi: {
+    type: String,
+    default: "/api/upload",
+  },
+  /**
    * The API route to use for the OpenAI completion API.
    * Defaults to "/api/generate".
    */
@@ -105,6 +113,7 @@ const props = defineProps({
 });
 
 provide('completionApi', props.completionApi)
+useStorage('blobApi', props.blobApi)
 
 const content = useStorage(props.storageKey, props.defaultValue);
 
