@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { watchEffect, type PropType, ref, watch } from "vue";
+import { watchEffect, type PropType, ref, watch, provide } from "vue";
 import {
   useEditor,
   EditorContent,
@@ -23,7 +23,7 @@ import { defaultEditorContent } from "../lib/default-content";
 import { defaultExtensions } from "../components/extensions";
 import { defaultEditorProps } from "../lib/props";
 import BubbleMenu from "../components/BubbleMenu/index.vue";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
 import { getPrevText } from "../lib/editor";
 
 const props = defineProps({
@@ -31,7 +31,7 @@ const props = defineProps({
    * The API route to use for the Vercel Blob.
    * Defaults to "/api/upload".
    */
-   blobApi: {
+  blobApi: {
     type: String,
     default: "/api/upload",
   },
@@ -112,8 +112,8 @@ const props = defineProps({
   },
 });
 
-provide('completionApi', props.completionApi)
-useStorage('blobApi', props.blobApi)
+provide("completionApi", props.completionApi);
+useStorage("blobApi", props.blobApi);
 
 const content = useStorage(props.storageKey, props.defaultValue);
 
